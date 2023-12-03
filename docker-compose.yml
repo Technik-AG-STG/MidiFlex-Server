@@ -1,0 +1,12 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - "25465:25465"
+    depends_on:
+      - midi
+  midi:
+    image: your-midi-image:tag
+    # Add appropriate configuration for your MIDI application
