@@ -4,4 +4,9 @@ Flask-Login==0.5.0
 Flask-WTF==0.15.1
 Werkzeug==2.0.2
 python-socketio==5.4.0
-eventlet==0.31.0 
+eventlet==0.31.0
+WTForms==3.1.1
+
+
+
+

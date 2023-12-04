@@ -37,7 +37,7 @@ MidiFlex Server is designed to facilitate MIDI control in a collaborative enviro
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/MidiFlex-Server.git
+    git clone https://github.com/Technik-AG-STG/MidiFlex-Server.git
     ```
 
 2. Install dependencies:

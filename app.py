@@ -64,10 +64,6 @@ profiles = {
 class User(UserMixin):
     pass
 
-async def start():
-    await sio.connect('http://midi-app-ip:5001')  # Replace 'midi-app-ip' with the IP of the MIDI app
-    await sio.wait()
-
 @login_manager.user_loader
 def load_user(user_id):
     if user_id in users:
@@ -126,9 +122,13 @@ def index():
     user_sliders = [Slider(slider['label'], slider['id']) for slider in user_profile['sliders']]
     return render_template('index.html', buttons=user_buttons, sliders=user_sliders)
 
+def send_midi_signal(type, data):
+    # Simplified function to send MIDI signal to the client
+    socketio.emit('midi_signal', {'type': type, 'data': data})
+
 @socketio.on('connect')
 def handle_connect():
-    emit('login', {'data': 'Connected'})
+    emit('login_response', {'data': 'Connected'})
 
 @socketio.on('login')
 def handle_login(data):
@@ -148,18 +148,18 @@ def handle_button_click(data):
     if current_user.id == 'admin':
         print(f"Button Clicked by Admin: {data}")
         # Send MIDI command for admin
-        sio.emit('button_click', data)
+        send_midi_signal('button_click', data)
     else:
         print(f"Button Clicked by User: {data}")
         # Send MIDI command for regular users
-        sio.emit('button_click', data, room=current_user.id)  # Send to the user's specific room
+        send_midi_signal('button_click', data)
 
 @socketio.on('fader_change')
 @login_required
 def handle_fader_change(data):
     print(f"Fader Changed: {data}")
     # Send MIDI command for fader change
-    sio.emit('fader_change', data, room=current_user.id)  # Send to the user's specific room
+    send_midi_signal('fader_change', data)
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host='0.0.0.0', port=25465)
+    socketio.run(app, debug=True, host='localhost', port=25550)
